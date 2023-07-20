@@ -39,7 +39,7 @@ _Hint_ - Use [nodemon](https://www.npmjs.com/package/nodemon) instead of `node` 
 
 #### Pre Generated Data
 
-_Info_ this data was generated via `scripts/generateKeys.js"`
+_Info_ this data was generated via `scripts/generateKeys.js`
 
 Person Name: Alice
 Private Key: b7bdc90d726ebc661d958aa38d41b3c4744b88fd6ce9115d12dcce63c3902ce0
