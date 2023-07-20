@@ -1,3 +1,6 @@
+const { toHex, utf8ToBytes } = require("ethereum-cryptography/utils.js");
+const { getPublicKey, getAddress, hashMessage, verifyTransaction } = require('./utils/utils');
+
 const express = require("express");
 const app = express();
 const cors = require("cors");
@@ -8,8 +11,9 @@ app.use(express.json());
 
 const balances = {
   "0x1": 100,
-  "0x2": 50,
-  "0x3": 75,
+};
+
+const addresses = {
 };
 
 app.get("/balance/:address", (req, res) => {
@@ -19,15 +23,43 @@ app.get("/balance/:address", (req, res) => {
 });
 
 app.post("/register", (req, res) => {
-  const { adress } = req.body;
+  const { privateKey } = req.body;
+  
+  const publicKey = getPublicKey(privateKey);
+  const address = '0x' + getAddress(publicKey);
 
-  balances[adress] = 50;
+  //console.log("Exists?",addresses.hasOwnProperty(address));
 
-  res.send({ balance: balances[adress] });
+  // Checks if the address is registered
+  if (!addresses.hasOwnProperty(address)) {
+    addresses[address] = publicKey;
+    balances[address] = 50;
+  }
+
+  res.send({ balance: balances[address], address:address });
 });
 
 app.post("/send", (req, res) => {
-  const { sender, recipient, amount } = req.body;
+  //console.log(req.body);
+  const { data: { sender, recipient, amount }, signature} = req.body;
+
+  let parsedSignature = signature;
+  parsedSignature.r = BigInt(parsedSignature.r);
+  parsedSignature.s = BigInt(parsedSignature.s);
+  //console.log(parsedSignature);
+
+  if (sender == recipient) {
+    res.status(400).send({ message: "Transaction Failed: You can't transfer funds to your own account" });
+    return
+  }
+
+  const isValid = verifyTransaction(amount, recipient, sender, parsedSignature, addresses[sender]);
+  //console.log('isValid?', isValid);
+
+  if (!isValid) {
+    res.status(400).send({ message: "Transaction Failed: You can't transfer funds from other wallet that it's not yours!" });
+    return
+  }
 
   setInitialBalance(sender);
   setInitialBalance(recipient);

@@ -6,22 +6,26 @@ import Register from "./Register";
 
 function App() {
   const [balance, setBalance] = useState(0);
+  const [privateKey, setPrivateKey] = useState();
   const [address, setAddress] = useState();
 
   return (
     <div className="app">
-      {address ? 
+      {privateKey ? 
       <>
       <Wallet
         balance={balance}
         setBalance={setBalance}
         address={address}
         setAddress={setAddress} />
-      <Transfer setBalance={setBalance} address={address} />
+      <Transfer setBalance={setBalance} 
+        address={address} 
+        privateKey={privateKey} />
       </> :
       <Register 
         setAddress = {setAddress}
-        setBalance={setBalance} />}
+        setBalance={setBalance}
+        setPrivateKey={setPrivateKey} />}
     </div>
   );
 }

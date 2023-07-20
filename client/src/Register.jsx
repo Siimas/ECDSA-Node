@@ -1,22 +1,18 @@
 import server from "./server";
-import { getAddress } from "./utils/utils";
 
-
-
-function Register({ setAddress, setBalance }) {
+function Register({ setAddress, setBalance, setPrivateKey }) {
 
   async function onChange(evt) {
-    const publicKey = evt.target.value;
+    const privateKey = evt.target.value;
 
-    const address = '0x' + getAddress(publicKey);
-
-    setAddress(address);
-
-    if (address) {
-      const { data: { balance } } = await server.post('/register', {
-        address
+    if (privateKey) {
+      setPrivateKey(privateKey);
+      const { data: { balance, address } } = await server.post('/register', {
+        privateKey
       });
+      
       setBalance(balance);
+      setAddress(address);
     } else {
       setBalance(0);
     }
@@ -27,8 +23,8 @@ function Register({ setAddress, setBalance }) {
       <h1>Register Your Wallet</h1>
 
       <label>
-        Public Key
-        <input placeholder="Type your public key" onChange={onChange}></input>
+        Private Key
+        <input placeholder="Type your Private Key" onChange={onChange}></input>
       </label>
     </div>
   );
