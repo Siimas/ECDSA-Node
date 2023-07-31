@@ -39,7 +39,7 @@ _Hint_ - Use [nodemon](https://www.npmjs.com/package/nodemon) instead of `node` 
 
 #### Pre Generated Data
 
-_Info_ this data was generated via `scripts/generateKeys.js`
+_Info_ - this data was generated via `scripts/generateKeys.js`
 
 Person Name: Alice
 Private Key: b7bdc90d726ebc661d958aa38d41b3c4744b88fd6ce9115d12dcce63c3902ce0
@@ -55,8 +55,4 @@ Public Key: 03dc9c0e933e5639c81009638914086734863ab1063a52d0c4124e59a1c1a812dc
 
 #### Todo
 
-- [ x ] Make the user register their address in the server with the public key
-
-#### Questions
-
-- How to use the private key without giving it to the web app (client). Solution: Pass the signature (replace the wallet address to the signature)
+- [x] Make the user register their address in the server with the public key
